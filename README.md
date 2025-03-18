@@ -3,7 +3,9 @@
 ## Requirements
 1. py -3.10 -m pip install mysql-connector-python
 2. py -3.10 -m pip install pandas sqlalchemy pymysql mysql-connector-python
+3. pip install opencv-python
+4. pip install flask
 
-말하는감자들
-조성원
-박승찬
+
+## Flask 사용법
+1. 주소 창에 본인의 주소 + ":5000" 을 입력하면 들어감 (127.0.0.1:5000)

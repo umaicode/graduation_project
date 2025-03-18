@@ -3,32 +3,56 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>깜빡임 횟수 차트</title>
+    <title>깜빡임 및 하품 횟수 차트</title>
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        canvas {
+            width: 48%; /* 차트 너비를 48%로 설정 */
+            height: 400px; /* 고정 높이 */
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>5분 단위 깜빡임 횟수 차트</h1>
-    <canvas id="blinkChart" width="800" height="400"></canvas>
+    <h1>10초 단위 깜빡임 및 하품 횟수 차트</h1>
+    
+    <div class="chart-container">
+        <div>
+            <h2>깜빡임 횟수 차트</h2>
+            <canvas id="blinkChart"></canvas>
+        </div>
+        <div>
+            <h2>하품 횟수 차트</h2>
+            <canvas id="yawnChart"></canvas>
+        </div>
+    </div>
 
     <script>
-        // Flask API에서 데이터를 가져와 차트에 적용
+        // Fetch Blink Data
         fetch('/api/blink_data')
             .then(response => response.json())
             .then(data => {
-                // API에서 받아온 데이터를 배열로 분리 (timestamp와 blink_count)
-                const labels = data.map(item => item.timestamp);
-                const counts = data.map(item => item.blink_count);
+                const blinkLabels = data.map(item => item.timestamp);
+                const blinkCounts = data.map(item => item.blink_count);
 
-                const ctx = document.getElementById('blinkChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'line', // 선 그래프
+                const blinkCtx = document.getElementById('blinkChart').getContext('2d');
+                new Chart(blinkCtx, {
+                    type: 'line', // Line graph
                     data: {
-                        labels: labels,
+                        labels: blinkLabels,
                         datasets: [{
                             label: '깜빡임 횟수',
-                            data: counts,
+                            data: blinkCounts,
                             borderColor: 'rgba(75, 192, 192, 1)',
                             backgroundColor: 'rgba(75, 192, 192, 0.2)',
                             fill: true,
@@ -36,6 +60,7 @@
                         }]
                     },
                     options: {
+                        responsive: true,  // 차트 크기 자동 조정
                         scales: {
                             x: {
                                 title: {
@@ -55,6 +80,49 @@
                 });
             })
             .catch(error => console.error('Error fetching blink data:', error));
+
+        // Fetch Yawn Data
+        fetch('/api/yawn_data')
+            .then(response => response.json())
+            .then(data => {
+                const yawnLabels = data.map(item => item.timestamp);
+                const yawnCounts = data.map(item => item.yawn_count);
+
+                const yawnCtx = document.getElementById('yawnChart').getContext('2d');
+                new Chart(yawnCtx, {
+                    type: 'line', // Line graph
+                    data: {
+                        labels: yawnLabels,
+                        datasets: [{
+                            label: '하품 횟수',
+                            data: yawnCounts,
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            fill: true,
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        responsive: true,  // 차트 크기 자동 조정
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: '시간'
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: '하품 횟수'
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching yawn data:', error));
     </script>
 </body>
 
