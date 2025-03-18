@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>깜빡임 횟수 차트</title>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <h1>5분 단위 깜빡임 횟수 차트</h1>
+    <canvas id="blinkChart" width="800" height="400"></canvas>
+
+    <script>
+        // Flask API에서 데이터를 가져와 차트에 적용
+        fetch('/api/blink_data')
+            .then(response => response.json())
+            .then(data => {
+                // API에서 받아온 데이터를 배열로 분리 (timestamp와 blink_count)
+                const labels = data.map(item => item.timestamp);
+                const counts = data.map(item => item.blink_count);
+
+                const ctx = document.getElementById('blinkChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line', // 선 그래프
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: '깜빡임 횟수',
+                            data: counts,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            fill: true,
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: '시간'
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: '깜빡임 횟수'
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching blink data:', error));
+    </script>
+</body>
+
+</html>
