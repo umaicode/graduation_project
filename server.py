@@ -6,8 +6,8 @@ app = Flask(__name__)
 db_config = {
     "host": "127.0.0.1",
     "user": "root",
-    "password": "0010",
-    "database": "blink_db",
+    "password": "0010",  # Adjust your password here
+    "database": "drowsiness_db",  # Update to your actual DB name
 }
 
 
@@ -21,8 +21,9 @@ def blink_data():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     cursor.execute(
-        "SELECT timestamp, blink_count FROM BlinkCount ORDER BY timestamp ASC"
+        "SELECT CONCAT(date, ' ', time) AS timestamp, blink_count FROM drowsiness_log ORDER BY date, time ASC"
     )
+
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -33,11 +34,28 @@ def blink_data():
     return jsonify(data)
 
 
+@app.route("/api/yawn_data")
+def yawn_data():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(
+        "SELECT CONCAT(date, ' ', time) AS timestamp, yawn_count FROM drowsiness_log ORDER BY date, time ASC"
+    )
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    data = [
+        {"timestamp": row["timestamp"], "yawn_count": row["yawn_count"]} for row in rows
+    ]
+    return jsonify(data)
+
+
 @app.route("/")
 def index():
-    return render_template("main.html")  # templates 폴더에 main.html 위치
+    return render_template(
+        "main.html"
+    )  # Ensure you have the correct path to the HTML file
 
 
 if __name__ == "__main__":
-    # 포트를 5000 혹은 원하는 다른 포트로 실행
     app.run(debug=True, port=5000)
