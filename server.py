@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 import mysql.connector
 
 app = Flask(__name__)
@@ -6,7 +6,7 @@ app = Flask(__name__)
 db_config = {
     "host": "127.0.0.1",
     "user": "root",
-    "password": "1234",
+    "password": "0010",
     "database": "blink_db",
 }
 
@@ -26,7 +26,6 @@ def blink_data():
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
-    # JSON 반환을 위한 데이터 구성
     data = [
         {"timestamp": row["timestamp"], "blink_count": row["blink_count"]}
         for row in rows
@@ -34,5 +33,11 @@ def blink_data():
     return jsonify(data)
 
 
+@app.route("/")
+def index():
+    return render_template("main.html")  # templates 폴더에 main.html 위치
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    # 포트를 5000 혹은 원하는 다른 포트로 실행
+    app.run(debug=True, port=5000)
