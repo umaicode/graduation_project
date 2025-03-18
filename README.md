@@ -5,3 +5,4 @@
 2. py -3.10 -m pip install pandas sqlalchemy pymysql mysql-connector-python
 
 말하는감자들
+조성원
