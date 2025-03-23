@@ -8,17 +8,22 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .chart-container {
-            display: flex;
-            justify-content: space-around;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        canvas {
-            width: 48%; /* 차트 너비를 48%로 설정 */
-            height: 400px; /* 고정 높이 */
             display: block;
+            width: 90%;
             margin: 0 auto;
+        }
+    
+        .chart-wrapper {
+            margin-bottom: 50px; /* 차트 사이 간격 */
+        }
+    
+        canvas {
+            width: 50% !important;  /* 전체 너비 */
+            height: 50% !important; /* 높이도 키우기 */
+        }
+    
+        h2 {
+            text-align: center;
         }
     </style>
 </head>
@@ -61,6 +66,7 @@
                     },
                     options: {
                         responsive: true,  // 차트 크기 자동 조정
+                        aspectRatio: 2,
                         scales: {
                             x: {
                                 title: {
