@@ -223,15 +223,18 @@ export default function AppPage() {
                 openMouthFrames = 0;
             }
 
-            if (openMouthFrames > 0) {
+            if (openMouthFrames >= YAWN_CONSEC_FRAMES) {
                 showAlert("하품을 하고 계십니다! 잠시 휴식을 취하세요.");
             }
 
             if (pitch < PITCH_THRESHOLD) neckDownFrames++;
             else {
                 if (neckDownFrames >= NECK_CONSEC_FRAMES) neckDownEvents++;
-                showAlert("고개를 숙이고 계십니다! 잠시 휴식을 취하세요.");
                 neckDownFrames = 0;
+            }
+
+            if (neckDownFrames >= NECK_CONSEC_FRAMES) {
+                showAlert("고개를 숙이고 계십니다! 자세를 바로 잡으세요.");
             }
         }
 
