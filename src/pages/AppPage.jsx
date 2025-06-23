@@ -12,7 +12,6 @@ export default function AppPage() {
     const navigate = useNavigate();
     const inited = useRef(false);
     const [videoReady, setVideoReady] = useState(false);
-    const [pitchValue, setPitchValue] = useState(0);
     const [alertMessage, setAlertMessage] = useState("");
     const alertAudio = useRef(new Audio(warningSound));
 
@@ -64,7 +63,7 @@ export default function AppPage() {
 
         const dpr = window.devicePixelRatio || 1;
         let camera;
-        let yawnFlag = true;
+        let yawnFlag = false;
         let closedEyeFrames = 0,
             openMouthFrames = 0,
             neckDownFrames = 0,
@@ -207,45 +206,46 @@ export default function AppPage() {
             smoothedPitch =
                 PITCH_ALPHA * rawPitch + (1 - PITCH_ALPHA) * smoothedPitch;
             const pitch = smoothedPitch;
-            setPitchValue(pitch);
-
-            // 상태 표시 텍스트 그리기
-            if (EAR < EAR_THRESHOLD) {
-                closedEyeFrames++;
-                if (closedEyeFrames >= FATIGUE_FRAME_COUNT) {
-                    showAlert("눈을 감고 계십니다! 잠시 휴식을 취하세요.");
-                }
-            } else {
-                if (closedEyeFrames >= FATIGUE_FRAME_COUNT) {
-                    blinkEvents++;
-                }
-                closedEyeFrames = 0;
-            }
 
             if (MAR > MAR_THRESHOLD) {
                 openMouthFrames++;
-                if (openMouthFrames >= YAWN_CONSEC_FRAMES && yawnFlag) {
+                if (openMouthFrames >= YAWN_CONSEC_FRAMES && !yawnFlag) {
                     showAlert("하품을 하고 계십니다! 잠시 휴식을 취하세요.");
-                    yawnFlag = false; // 하품 이벤트 후 플래그 리셋
+                    yawnFlag = true; // 하품 이벤트 후 플래그 리셋
                 }
             } else {
                 if (openMouthFrames >= YAWN_CONSEC_FRAMES) {
                     yawnEvents++;
-                    yawnFlag = true; // 하품 이벤트 후 플래그 리셋
+                    yawnFlag = false; // 하품 이벤트 후 플래그 리셋
                 }
                 openMouthFrames = 0;
             }
+            if (!yawnFlag) {
+                if (EAR < EAR_THRESHOLD) {
+                    closedEyeFrames++;
+                    if (closedEyeFrames >= FATIGUE_FRAME_COUNT) {
+                        showAlert("눈을 감고 계십니다! 잠시 휴식을 취하세요.");
+                    }
+                } else {
+                    if (closedEyeFrames >= FATIGUE_FRAME_COUNT) {
+                        blinkEvents++;
+                    }
+                    closedEyeFrames = 0;
+                }
 
-            if (pitch < PITCH_THRESHOLD) {
-                neckDownFrames++;
-                if (neckDownFrames >= NECK_CONSEC_FRAMES) {
-                    showAlert("고개를 숙이고 계십니다! 자세를 바로 잡으세요.");
+                if (pitch < PITCH_THRESHOLD) {
+                    neckDownFrames++;
+                    if (neckDownFrames >= NECK_CONSEC_FRAMES) {
+                        showAlert(
+                            "고개를 숙이고 계십니다! 자세를 바로 잡으세요."
+                        );
+                    }
+                } else {
+                    if (neckDownFrames >= NECK_CONSEC_FRAMES) {
+                        neckDownEvents++;
+                    }
+                    neckDownFrames = 0;
                 }
-            } else {
-                if (neckDownFrames >= NECK_CONSEC_FRAMES) {
-                    neckDownEvents++;
-                }
-                neckDownFrames = 0;
             }
         }
 
@@ -332,21 +332,6 @@ export default function AppPage() {
                         zIndex: 1,
                     }}
                 />
-            </div>
-            <div
-                style={{
-                    position: "absolute",
-                    top: "6rem",
-                    left: "1rem",
-                    background: "rgba(0, 0, 0, 0.6)",
-                    color: "#0f0",
-                    padding: "0.5rem 0.8rem",
-                    borderRadius: "6px",
-                    fontSize: "0.9rem",
-                    zIndex: 20,
-                }}
-            >
-                Pitch: {pitchValue}°
             </div>
             <button
                 id="stopBtn"
