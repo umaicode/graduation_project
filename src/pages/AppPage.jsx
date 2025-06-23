@@ -12,6 +12,7 @@ export default function AppPage() {
     const navigate = useNavigate();
     const inited = useRef(false);
     const [videoReady, setVideoReady] = useState(false);
+    const [pitchValue, setPitchValue] = useState(0);
     const [alertMessage, setAlertMessage] = useState("");
     const alertAudio = useRef(new Audio(warningSound));
 
@@ -206,6 +207,7 @@ export default function AppPage() {
             smoothedPitch =
                 PITCH_ALPHA * rawPitch + (1 - PITCH_ALPHA) * smoothedPitch;
             const pitch = smoothedPitch;
+            setPitchValue(pitch);
 
             // 상태 표시 텍스트 그리기
             if (EAR < EAR_THRESHOLD) {
@@ -330,6 +332,21 @@ export default function AppPage() {
                         zIndex: 1,
                     }}
                 />
+            </div>
+            <div
+                style={{
+                    position: "absolute",
+                    top: "6rem",
+                    left: "1rem",
+                    background: "rgba(0, 0, 0, 0.6)",
+                    color: "#0f0",
+                    padding: "0.5rem 0.8rem",
+                    borderRadius: "6px",
+                    fontSize: "0.9rem",
+                    zIndex: 20,
+                }}
+            >
+                Pitch: {pitchValue}°
             </div>
             <button
                 id="stopBtn"
