@@ -63,9 +63,7 @@ export default function AppPage() {
 
         const dpr = window.devicePixelRatio || 1;
         let camera;
-        let eyeFlag = true;
         let yawnFlag = true;
-        let neckDownFlag = true;
         let closedEyeFrames = 0,
             openMouthFrames = 0,
             neckDownFrames = 0,
@@ -212,31 +210,37 @@ export default function AppPage() {
             // 상태 표시 텍스트 그리기
             if (EAR < EAR_THRESHOLD) {
                 closedEyeFrames++;
-                if (closedEyeFrames >= FATIGUE_FRAME_COUNT && eyeFlag) {
+                if (closedEyeFrames >= FATIGUE_FRAME_COUNT) {
                     showAlert("눈을 감고 계십니다! 잠시 휴식을 취하세요.");
-                    eyeFlag = false;
                 }
             } else {
                 if (closedEyeFrames >= FATIGUE_FRAME_COUNT) {
                     blinkEvents++;
-                    eyeFlag = true;
                 }
                 closedEyeFrames = 0;
             }
 
-            if (MAR > MAR_THRESHOLD) openMouthFrames++;
-            else {
-                if (openMouthFrames >= YAWN_CONSEC_FRAMES) {
+            if (MAR > MAR_THRESHOLD) {
+                openMouthFrames++;
+                if (openMouthFrames >= YAWN_CONSEC_FRAMES && yawnFlag) {
                     showAlert("하품을 하고 계십니다! 잠시 휴식을 취하세요.");
+                    yawnFlag = false; // 하품 이벤트 후 플래그 리셋
+                }
+            } else {
+                if (openMouthFrames >= YAWN_CONSEC_FRAMES) {
                     yawnEvents++;
+                    yawnFlag = true; // 하품 이벤트 후 플래그 리셋
                 }
                 openMouthFrames = 0;
             }
 
-            if (pitch < PITCH_THRESHOLD) neckDownFrames++;
-            else {
+            if (pitch < PITCH_THRESHOLD) {
+                neckDownFrames++;
                 if (neckDownFrames >= NECK_CONSEC_FRAMES) {
                     showAlert("고개를 숙이고 계십니다! 자세를 바로 잡으세요.");
+                }
+            } else {
+                if (neckDownFrames >= NECK_CONSEC_FRAMES) {
                     neckDownEvents++;
                 }
                 neckDownFrames = 0;
