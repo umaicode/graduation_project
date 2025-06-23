@@ -230,6 +230,7 @@ export default function AppPage() {
             if (pitch < PITCH_THRESHOLD) neckDownFrames++;
             else {
                 if (neckDownFrames >= NECK_CONSEC_FRAMES) neckDownEvents++;
+                showAlert("고개를 숙이고 계십니다! 잠시 휴식을 취하세요.");
                 neckDownFrames = 0;
             }
         }
