@@ -63,6 +63,9 @@ export default function AppPage() {
 
         const dpr = window.devicePixelRatio || 1;
         let camera;
+        let eyeFlag = true;
+        let yawnFlag = true;
+        let neckDownFlag = true;
         let closedEyeFrames = 0,
             openMouthFrames = 0,
             neckDownFrames = 0,
@@ -207,11 +210,16 @@ export default function AppPage() {
             const pitch = smoothedPitch;
 
             // 상태 표시 텍스트 그리기
-            if (EAR < EAR_THRESHOLD) closedEyeFrames++;
-            else {
-                if (closedEyeFrames >= FATIGUE_FRAME_COUNT) {
+            if (EAR < EAR_THRESHOLD) {
+                closedEyeFrames++;
+                if (closedEyeFrames >= FATIGUE_FRAME_COUNT && eyeFlag) {
                     showAlert("눈을 감고 계십니다! 잠시 휴식을 취하세요.");
+                    eyeFlag = false;
+                }
+            } else {
+                if (closedEyeFrames >= FATIGUE_FRAME_COUNT) {
                     blinkEvents++;
+                    eyeFlag = true;
                 }
                 closedEyeFrames = 0;
             }
