@@ -210,8 +210,8 @@ export default function AppPage() {
             if (EAR < EAR_THRESHOLD) closedEyeFrames++;
             else {
                 if (closedEyeFrames >= FATIGUE_FRAME_COUNT) {
-                    blinkEvents++;
                     showAlert("눈을 감고 계십니다! 잠시 휴식을 취하세요.");
+                    blinkEvents++;
                 }
                 closedEyeFrames = 0;
             }
@@ -219,8 +219,8 @@ export default function AppPage() {
             if (MAR > MAR_THRESHOLD) openMouthFrames++;
             else {
                 if (openMouthFrames >= YAWN_CONSEC_FRAMES) {
-                    yawnEvents++;
                     showAlert("하품을 하고 계십니다! 잠시 휴식을 취하세요.");
+                    yawnEvents++;
                 }
                 openMouthFrames = 0;
             }
@@ -228,8 +228,8 @@ export default function AppPage() {
             if (pitch < PITCH_THRESHOLD) neckDownFrames++;
             else {
                 if (neckDownFrames >= NECK_CONSEC_FRAMES) {
-                    neckDownEvents++;
                     showAlert("고개를 숙이고 계십니다! 자세를 바로 잡으세요.");
+                    neckDownEvents++;
                 }
                 neckDownFrames = 0;
             }
