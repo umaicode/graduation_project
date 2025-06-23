@@ -1,0 +1,152 @@
+button {
+    width: 130px;
+}
+.custom-btn {
+    width: 130px;
+    height: 40px;
+    padding: 10px 25px;
+    border: 2px solid #000;
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+}
+
+/* 로그인 버튼 */
+.login {
+    background: #000;
+    color: #fff;
+    line-height: 42px;
+    padding: 0;
+    border: none;
+}
+.login:hover {
+    background: transparent;
+    color: #000;
+    box-shadow: -7px -7px 20px 0px #fff9, -4px -4px 5px 0px #fff9,
+        7px 7px 20px 0px #0002, 4px 4px 5px 0px #0001;
+}
+.login:before,
+.login:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 2px;
+    width: 0;
+    background: #000;
+    transition: 400ms ease all;
+}
+.login:after {
+    right: inherit;
+    top: inherit;
+    left: 0;
+    bottom: 0;
+}
+.login:hover:before,
+.login:hover:after {
+    width: 100%;
+    transition: 800ms ease all;
+}
+
+/* 로그아웃 버튼 */
+.logout {
+    background: #e0616a;
+    color: #fff;
+    line-height: 42px;
+    padding: 0;
+    border: none;
+}
+.logout:hover {
+    background: transparent;
+    color: #e0616a;
+    box-shadow: -7px -7px 20px 0px #fff9, -4px -4px 5px 0px #fff9,
+        7px 7px 20px 0px #0002, 4px 4px 5px 0px #0001;
+}
+.logout:before,
+.logout:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 2px;
+    width: 0;
+    background: #e0616a;
+    transition: 400ms ease all;
+}
+.logout:after {
+    right: inherit;
+    top: inherit;
+    left: 0;
+    bottom: 0;
+}
+.logout:hover:before,
+.logout:hover:after {
+    width: 100%;
+    transition: 800ms ease all;
+}
+
+/* 회원가입 버튼 */
+.signup {
+    line-height: 39px;
+    padding: 0;
+}
+.signup:hover {
+    background: transparent;
+    color: #000;
+}
+.signup span {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.signup:before,
+.signup:after {
+    position: absolute;
+    content: "";
+    left: 0;
+    top: 0;
+    background: #000;
+    transition: all 0.3s ease;
+}
+.signup:before {
+    height: 0%;
+    width: 2px;
+}
+.signup:after {
+    width: 0%;
+    height: 2px;
+}
+.signup:hover:before {
+    height: 100%;
+}
+.signup:hover:after {
+    width: 100%;
+}
+.signup span:before,
+.signup span:after {
+    position: absolute;
+    content: "";
+    right: 0;
+    bottom: 0;
+    background: #000;
+    transition: all 0.3s ease;
+}
+.signup span:before {
+    width: 2px;
+    height: 0%;
+}
+.signup span:after {
+    width: 0%;
+    height: 2px;
+}
+.signup span:hover:before {
+    height: 100%;
+}
+.signup span:hover:after {
+    width: 100%;
+}
